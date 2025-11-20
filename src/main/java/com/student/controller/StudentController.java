@@ -225,7 +225,7 @@ public class StudentController extends HttpServlet {
             isValid = false;
         }
         // TODO: Validate major
-        if (student.getMajor() == null) {
+        if (student.getMajor().equals("")) {
             request.setAttribute("errorMajor", "Major is required");
             isValid = false;
         }
