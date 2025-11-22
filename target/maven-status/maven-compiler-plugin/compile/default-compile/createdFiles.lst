@@ -1,4 +1,11 @@
 com\student\dao\StudentDAO.class
+filter\AuthFilter.class
+com\student\dao\UserDAO.class
+com\student\model\User.class
+com\student\controller\LogoutController.class
+com\student\controller\LoginController.class
 com\student\controller\StudentController.class
+filter\AdminFilter.class
+com\student\controller\DashboardController.class
 com\student\controller\NewServlet.class
 com\student\model\Student.class

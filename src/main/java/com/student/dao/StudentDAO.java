@@ -48,6 +48,22 @@ public class StudentDAO {
         return students;
     }
 
+    // get getTotalStudents
+    public int getTotalStudents(){
+        int totalStudent=0; 
+        String sql = "Select Count(*) from student_management.students";
+       try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)){
+             if(rs.next()){
+                 totalStudent = rs.getInt(1);
+             }
+       }
+       catch (SQLException e){
+           e.printStackTrace();
+       }
+       return totalStudent;
+    }
     // Get student by ID
     public Student getStudentById(int id) {
         String sql = "SELECT * FROM students WHERE id = ?";
@@ -245,6 +261,8 @@ public class StudentDAO {
 
         return students;
     }
+    
+    
 
 
 }

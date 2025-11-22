@@ -224,142 +224,77 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>📚 Student Management System</h1>
-    <p class="subtitle">MVC Pattern with Jakarta EE & JSTL</p>
-
-    <!-- Success Message -->
-    <c:if test="${not empty param.message}">
-        <div class="message success">
-            ✅ ${param.message}
+    <body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <h2>📚 Student Management System</h2>
+        <div class="navbar-right">
+            <div class="user-info">
+                <span>Welcome, ${sessionScope.fullName}</span>
+                <span class="role-badge role-${sessionScope.role}">
+                    ${sessionScope.role}
+                </span>
+            </div>
+            <a href="dashboard" class="btn-nav">Dashboard</a>
+            <a href="logout" class="btn-logout">Logout</a>
         </div>
-    </c:if>
-
-    <!-- Error Message -->
-    <c:if test="${not empty param.error}">
-        <div class="message error">
-            ❌ ${param.error}
-        </div>
-    </c:if>
-
-    <!-- Add New Student Button -->
-    <div class="toolbar">
-        <a href="student?action=new" class="btn btn-primary">
-            ➕ Add New Student
-        </a>
-
-        <form action="student" method="GET" class="filter-form">
-            <input type="hidden" name="action" value="filter">
-
-            <label for="majorFilter" style="margin:0; font-weight:500;">Filter by:</label>
-            <select name="major" id="majorFilter">
-                <option value="">All Majors</option>
-                <option value="Computer Science" ${param.major == 'Computer Science' ? 'selected' : ''}>Computer Science</option>
-                <option value="Information Technology" ${param.major == 'Information Technology' ? 'selected' : ''}>Information Technology</option>
-                <option value="Software Engineering" ${param.major == 'Software Engineering' ? 'selected' : ''}>Software Engineering</option>
-                <option value="Business Administration" ${param.major == 'Business Administration' ? 'selected' : ''}>Business Administration</option>
-            </select>
-
-            <button type="submit" class="btn btn-secondary" style="padding: 8px 12px;">Apply</button>
-
-            <c:if test="${not empty param.major}">
-                <a href="student?action=list" style="color: #dc3545; font-size: 0.9em;">❌ Clear</a>
-            </c:if>
-        </form>
-
-        <form action="student" method="GET" class="search-form">
-            <input type="hidden" name="action" value="search">
-            <input type="text" name="keyword" class="search-input"
-                   placeholder="Search..." value="${param.keyword}">
-            <button type="submit" class="btn btn-primary" style="padding: 8px 12px;">🔍</button>
-        </form>
     </div>
-
-    <c:if test="${not empty param.keyword}">
-        <p class="search-results-msg">
-            Search results for: <strong>"${param.keyword}"</strong>
-        </p>
-    </c:if>
-
-
-
-    <!-- Student Table -->
-    <c:choose>
-        <c:when test="${not empty students}">
-            <table>
-                <thead>
+    
+    <div class="container">
+        <h1>📚 Student List</h1>
+        
+        <!-- Add button - Admin only -->
+        <c:if test="${sessionScope.role eq 'admin'}">
+            <div style="margin: 20px 0;">
+                <a href="student?action=new" class="btn-add">➕ Add New Student</a>
+            </div>
+        </c:if>
+        
+        <!-- Student Table -->
+        <table>
+            <thead>
                 <tr>
-                    <th>
-                        <c:set var="order" value="${param.sortBy == 'id' && param.order == 'asc' ? 'desc' : 'asc'}" />
-                        <a href="student?action=sort&sortBy=id&order=${order}">
-                            ID ${param.sortBy == 'id' ? (param.order == 'asc' ? '⬆️' : '⬇️') : ''}
-                        </a>
-                    </th>
-
-                    <th>
-                        <c:set var="order" value="${param.sortBy == 'student_code' && param.order == 'asc' ? 'desc' : 'asc'}" />
-                        <a href="student?action=sort&sortBy=student_code&order=${order}">
-                            Student Code ${param.sortBy == 'student_code' ? (param.order == 'asc' ? '⬆️' : '⬇️') : ''}
-                        </a>
-                    </th>
-
-                    <th>
-                        <c:set var="order" value="${param.sortBy == 'full_name' && param.order == 'asc' ? 'desc' : 'asc'}" />
-                        <a href="student?action=sort&sortBy=full_name&order=${order}">
-                            Full Name ${param.sortBy == 'full_name' ? (param.order == 'asc' ? '⬆️' : '⬇️') : ''}
-                        </a>
-                    </th>
-
-                    <th>
-                        <c:set var="order" value="${param.sortBy == 'email' && param.order == 'asc' ? 'desc' : 'asc'}" />
-                        <a href="student?action=sort&sortBy=email&order=${order}">
-                            Email ${param.sortBy == 'email' ? (param.order == 'asc' ? '⬆️' : '⬇️') : ''}
-                        </a>
-                    </th>
-
-                    <th>
-                        <c:set var="order" value="${param.sortBy == 'major' && param.order == 'asc' ? 'desc' : 'asc'}" />
-                        <a href="student?action=sort&sortBy=major&order=${order}">
-                            Major ${param.sortBy == 'major' ? (param.order == 'asc' ? '⬆️' : '⬇️') : ''}
-                        </a>
-                    </th>
-
-                    <th>Actions</th>
+                    <th>ID</th>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Major</th>
+                    <c:if test="${sessionScope.role eq 'admin'}">
+                        <th>Actions</th>
+                    </c:if>
                 </tr>
-                </thead>
-                <tbody>
+            </thead>
+            <tbody>
                 <c:forEach var="student" items="${students}">
                     <tr>
                         <td>${student.id}</td>
-                        <td><strong>${student.studentCode}</strong></td>
+                        <td>${student.studentCode}</td>
                         <td>${student.fullName}</td>
                         <td>${student.email}</td>
                         <td>${student.major}</td>
-                        <td>
-                            <div class="actions">
-                                <a href="student?action=edit&id=${student.id}" class="btn btn-secondary">
-                                    ✏️ Edit
-                                </a>
-                                <a href="student?action=delete&id=${student.id}"
-                                   class="btn btn-danger"
-                                   onclick="return confirm('Are you sure you want to delete this student?')">
-                                    🗑️ Delete
-                                </a>
-                            </div>
-                        </td>
+                        
+                        <!-- Action buttons - Admin only -->
+                        <c:if test="${sessionScope.role eq 'admin'}">
+                            <td>
+                                <a href="student?action=edit&id=${student.id}" 
+                                   class="btn-edit">Edit</a>
+                                <a href="student?action=delete&id=${student.id}" 
+                                   class="btn-delete"
+                                   onclick="return confirm('Delete this student?')">Delete</a>
+                            </td>
+                        </c:if>
                     </tr>
                 </c:forEach>
-                </tbody>
-            </table>
-        </c:when>
-        <c:otherwise>
-            <div class="empty-state">
-                <div class="empty-state-icon">📭</div>
-                <h3>No students found</h3>
-                <p>Start by adding a new student</p>
-            </div>
-        </c:otherwise>
-    </c:choose>
-</div>
+                
+                <c:if test="${empty students}">
+                    <tr>
+                        <td colspan="6" style="text-align: center;">
+                            No students found
+                        </td>
+                    </tr>
+                </c:if>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
