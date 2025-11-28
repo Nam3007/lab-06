@@ -174,6 +174,26 @@ public class UserDAO {
     }
     
     /**
+     * Change password
+     */
+    public boolean changePassword ( int userId, String newHashedPassword){
+        String sql = "Update users SET password = ? Where id= ? ";
+        
+        try(Connection conn = getConnection()){
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, newHashedPassword);
+            ps.setInt(2,userId);
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected >0;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+        
+    }
+    /**
      * Test method - Generate hashed password
      */
     public static void main(String[] args) {

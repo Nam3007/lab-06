@@ -221,7 +221,21 @@
             text-decoration: underline;
             color: #e2e6ea;
         }
+        .btn-changePassword {
+            padding: 8px 20px;
+            background: #34495e;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+    
     </style>
+
 </head>
 <body>
     <body>
@@ -237,7 +251,8 @@
             </div>
             <a href="dashboard" class="btn-nav">Dashboard</a>
             <a href="logout" class="btn-logout">Logout</a>
-        </div>
+             <a href="change-password" class="btn-ChangePassword">Change Password</a>
+            
     </div>
     
     <div class="container">

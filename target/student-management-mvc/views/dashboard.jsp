@@ -181,6 +181,16 @@
         .action-btn-warning {
             background: #f39c12;
         }
+        .btn-ChangePassword {
+            padding: 8px 20px;
+            background: #27ae60;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
     </style>
 </head>
 <body>
@@ -195,6 +205,8 @@
                 </span>
             </div>
             <a href="logout" class="btn-logout">Logout</a>
+            <a href="change-password" class="btn-ChangePassword">Change Password</a>
+    
         </div>
     </div>
     
